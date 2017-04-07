@@ -9,18 +9,20 @@
 from Queue import Queue
 from BSTTree import BSTTree
 
-# find_optimal_tree_ordering : alpha_list, beta_list, beta_length -> list(num)
-# returns BSTTree object based on even weighted subtrees
-
 def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
+    """
+    Returns optimal insertion order of keys given a list of key probabilities
+    (beta_list) and gap probabilities (alpha_list)
+    """
     element_list = []
 
-    # holds subdivisions of beta array
+    # holds subdivisions of beta value array
     section_queue = Queue()
 
     # triple contains beginning and ending indices of array and probability sum
     section_queue.put((0, beta_length - 1, 1))
 
+    # Iteratively find the best root for each subtree
     while not section_queue.empty():
 
         # find best split
@@ -51,13 +53,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
 
         for i in xrange(1, (right_index - left_index + 1)):
             # print "inside loop at ", i
-            # move left to the right by one, move right to the left by one
-            # adjust the probability sums as necessary
-            # compare the differences with the most recent ones
-            # if a smaller difference, continue
-            # if a larger difference, break
-                # backtrack to last split and break
-
 
             # Move lefthand pointer inwards and calculate new split
             left_prob_sum += beta_list[left_index + i - 1] + alpha_list[left_index + i]
@@ -117,9 +112,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
     return element_list
 
 def test():
-    # print find_optimal_tree_ordering([.25, .25], [.5], 1)
-    # print find_optimal_tree_ordering([.1, .1], [.2, .2, .4], 2)
-
     result = find_optimal_tree_ordering([.3, .1, .3], [.075, .075, .075, .075], 3)
     print "\n1 0 2:", result
 
@@ -131,10 +123,6 @@ def test():
 
     result = find_optimal_tree_ordering([.05, .05, .1, .15], [.2, .1, .1, .15, .15], 4)
     print "\n2 0 3 1", result
-
-    # print "1 0 2:", find_optimal_tree_ordering([.3, .1, .3], [.075, .075, .075, .075], 3)
-    # print "0 2 1:", find_optimal_tree_ordering([.05, .05, .05], [.45, .1, .1, .2], 3)
-    # print "0 1 2:", find_optimal_tree_ordering([.05, .2, .05], [.45, .1, .1, .05], 3)
     print "Tests completed without errors"
 
 test()
