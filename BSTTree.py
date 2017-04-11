@@ -66,3 +66,15 @@ class BSTTree:
         func(self.value)
         if self.right:
             self.right.inorder_traversal(func)
+
+    def preorder_traversal(self, func):
+        """
+        Performs specified function for each node in tree in pre order
+        """
+        if self.value is None:
+            return
+        func(self.value)
+        if self.left:
+            self.left.preorder_traversal(func)
+        if self.right:
+            self.right.preorder_traversal(func)
