@@ -53,15 +53,42 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_len):
     #print "root_table: \n", print_table(root_table)
     return (exp_table, root_table)
 
+# construct_tree : root_table -> list of indices
+# in case of building tree, must pass in k_list so that actual values can be inserted
+def construct_tree(root_table):
+    (i, j) = 0, len(root_table) - 1
+    # parent = BSTTree(root_table[i][j])
+    node_stack = [(i, j)] # parent
+    element_list = []
+    while node_stack:
+        (i, j) = node_stack.pop()
+        print i, j
+        next_root = root_table[i][j]
+        print "next root is", next_root
+        element_list.append(next_root)
+        if (next_root + 1 <= j):
+            node_stack.append((next_root + 1, j))
+        if i <= (next_root - 1):
+            node_stack.append((i, next_root - 1))
+            
+
+    return element_list
+
+
 def print_table(table):
     for row in table:
         print row
 
 def test():
-    #find_optimal_tree_ordering([.1], [.45, .45], 1)
+    # print find_optimal_tree_ordering([.1], [.45, .45], 1)
+    (exp, root) = find_optimal_tree_ordering([.15, .10, .05, .10, .2], [.05, .1, .05, .05, .05, .1], 5)
+    print_table(exp)
+    print_table(root)
+    print construct_tree(root)
+
     #find_optimal_tree_ordering([0.000999000999] * 500, [.000999000999] * 501, 500)
     #find_optimal_tree_ordering([0.0006662225183] * 750, [0.0006662225183] * 751, 750)
-    find_optimal_tree_ordering([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
+    # print find_optimal_tree_ordering([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
 
 test()
 
