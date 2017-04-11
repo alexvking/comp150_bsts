@@ -1,4 +1,9 @@
-# Testing
+# bsttests.py
+# COMP 150
+# Created by Alex King
+# 3/31/2017
+
+# Testing the functionality, correctness, and general runtime of BSTTree
 
 from BSTTree import BSTTree
 from random import randint
@@ -15,13 +20,17 @@ for i in range(30):
     values.append(random)
     myTree.insert(random)
 
+print myTree
+
+
 # Ensure insertion works as expected
 for v in values:
     if not myTree.find(v):
         print "Inserted value %d not found in tree!" % v
         exit(1)
 
-myTree.inorder_traversal((lambda x : print_value(x)))
+myTree.preorder_traversal((lambda x : print_value(x)))
+exit(1)
 
 values = []
 myTree.inorder_traversal((lambda x : values.append(x)))

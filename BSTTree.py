@@ -1,5 +1,10 @@
-# Binary Search Tree Implementation
+# BSTTree.py
 # COMP 150
+# Created by Alex King
+# 3/31/2017
+
+# Basic binary search tree implementation to be used by optimal construction
+# algorithms
 
 class BSTTree:
     def __init__(self, value):
@@ -78,3 +83,20 @@ class BSTTree:
             self.left.preorder_traversal(func)
         if self.right:
             self.right.preorder_traversal(func)
+
+    def __str__(self, depth=0):
+        """
+        Prints binary search tree structure in rotated fashion
+        Algorithm taken from http://krenzel.org/articles/printing-trees
+        """
+        ret = ""
+
+        if self.right != None:
+            ret += self.right.__str__(depth + 1)
+
+        ret += "\n" + ("    "*depth) + str(self.value)
+
+        if self.left != None:
+            ret += self.left.__str__(depth + 1)
+
+        return ret
