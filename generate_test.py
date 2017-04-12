@@ -1,6 +1,7 @@
 #file to generate different types of test data
 
 import random
+from collections import Counter
 
 #generate test file and prob values given number of values and range
 def generate_test(element_range, num_checks):
@@ -82,10 +83,36 @@ def generate_fuzz_search(alphas, betas, num):
 
 	return (test_list)
 
+def generate_probs(data):
+	total = len(data)
+
+	counts = Counter(data)
+	
+	beta_values = []
+	alphas = []
+	betas = []
+
+	num = 0
+
+	for (k, c) in counts.items():
+		if num == 0:
+			alphas.append(c/float(total))
+			num = 1
+		else:
+			betas.append(c/float(total))
+			beta_values.append(k)
+			num = 0
+
+	if len(alphas) == len(betas):
+		alphas.append(0.0)
+
+	return (alphas, betas, beta_values)
+
 def test():
 	#print generate_search([.25, .25], [.5], 20)
 	#print generate_test(6, 12)
-	print generate_fuzz_search([.2, .3], [.5], 12)
+	#print generate_fuzz_search([.2, .3], [.5], 12)
+	print generate_probs([1, 1, 1, 1, 3, 3, 4, 4, 5, 6, 6, 6])
 
 test()
 
