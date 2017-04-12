@@ -73,13 +73,10 @@ def generate_fuzz_search(alphas, betas, num):
 	for i in range(len(all_probs)):
 		sum_probs[i] = sum_probs[i-1] + all_probs[i]
 
-	print sum_probs
-
 	for i in range(num):
 		indicator = random.random()
 		for j in range(len(sum_probs)):
 			if indicator < sum_probs[j]:
-				print "value:", i, "=", indicator, "so inserting", j
 				test_list.append(j)
 				break
 
