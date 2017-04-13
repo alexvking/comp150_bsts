@@ -72,6 +72,28 @@ class BSTTree:
         if self.right:
             self.right.inorder_traversal(func)
 
+    def inorder_traversal_iter(self, func):
+        """
+        Performs specified function for each node in tree in order
+        Iterative algorithm taken from http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+        """
+        # Set current to root of binary tree
+        current = self 
+        s = []
+        done = 0
+         
+        while(not done):
+            if current is not None:
+                s.append(current)
+                current = current.left 
+            else:
+                if(len(s) >0 ):
+                    current = s.pop()
+                    func(current.value),
+                    current = current.right 
+                else:
+                    done = 1
+
     def preorder_traversal(self, func):
         """
         Performs specified function for each node in tree in pre order

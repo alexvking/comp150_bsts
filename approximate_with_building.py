@@ -10,7 +10,9 @@ from Queue import Queue
 from BSTTree import BSTTree
 import sys
 
-def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
+EPSILON = 0.00000001
+
+def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
     """
     Returns nearly optimal binary search tree given key probabilities
     (beta_list) and gap probabilities (alpha_list)
@@ -30,7 +32,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
 
         # find best split
         (left_index, right_index, prob_sum, parent) = section_queue.get()
-        # print "popped off:", left_index, right_index, prob_sum
 
         if (left_index < 0 or 
             right_index >= beta_length or 
@@ -39,8 +40,9 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
 
         if left_index == right_index:
             # print "base case with", left_index, right_index
-            # element_list.append(left_index)
-            node = BSTTree(left_index)
+            element_list.append(left_index)
+            node = BSTTree(key_list[left_index])
+
             if parent is None:
                 # print "parent is none in base case"
                 root = node
@@ -67,6 +69,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
 
         for i in xrange(1, (right_index - left_index + 1)):
             # print "inside loop at ", i
+            # print "left last diff is", left_last_diff
 
             # Move lefthand pointer inwards and calculate new split
             left_prob_sum += beta_list[left_index + i - 1] + alpha_list[left_index + i]
@@ -74,19 +77,24 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
             new_diff = abs(left_prob_sum - 
                            (prob_sum - left_prob_sum - beta_list[left_index + i]))
 
+            # print "just calculated new diff which is", new_diff
+
             # print "lefthand new prob sum", left_prob_sum
             # print "new diff for left is", new_diff
+            # print "and left last diff is", left_last_diff
 
-            if new_diff < left_last_diff:
-               left_last_diff = new_diff
+            if new_diff < left_last_diff and abs(new_diff - left_last_diff) > EPSILON:
+                # print abs(new_diff - left_last_diff)
+                # print "new diff of %f is better than old of %f" % (new_diff, left_last_diff)
+                left_last_diff = new_diff
             else:
                 best_split = left_index + i - 1
-                # print "found best split at", best_split
                 element_list.append(best_split)
-                node = BSTTree(best_split)
+                node = BSTTree(key_list[best_split])
+
                 if parent is None:
                     root = node
-                elif best_split < parent.value:
+                elif key_list[best_split] < parent.value:
                     parent.left = node
                 else:
                     parent.right = node
@@ -115,17 +123,17 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
             # print "righthand prob sum", right_prob_sum
             # print "new diff for right is", new_diff
 
-            if new_diff < right_last_diff:
+            if new_diff < right_last_diff and abs(new_diff - right_last_diff) > EPSILON:
                 right_last_diff = new_diff
             else:
                 
                 best_split = right_index - i + 1
-                # print "found best split at", best_split
                 element_list.append(best_split)
-                node = BSTTree(best_split)
+                node = BSTTree(key_list[best_split])
+
                 if parent is None:
                     root = node
-                elif best_split < parent.value:
+                elif key_list[best_split] < parent.value:
                     parent.left = node
                 else:
                     parent.right = node
@@ -142,5 +150,5 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
 
                 break
 
-    # return element_list
+    print len(element_list)
     return root

@@ -94,7 +94,9 @@ def generate_probs(data):
 
 	num = 0
 
-	for (k, c) in counts.items():
+	it = iter(sorted(counts.iteritems()))
+
+	for (k, c) in it:
 		if num == 0:
 			alphas.append(c/float(total))
 			num = 1
@@ -114,6 +116,6 @@ def test():
 	#print generate_fuzz_search([.2, .3], [.5], 12)
 	print generate_probs([1, 1, 1, 1, 3, 3, 4, 4, 5, 6, 6, 6])
 
-test()
+# test()
 
 
