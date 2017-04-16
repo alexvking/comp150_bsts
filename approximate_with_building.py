@@ -10,9 +10,9 @@ from Queue import Queue
 from BSTTree import BSTTree
 import sys
 
-EPSILON = 0.0000001
+# EPSILON = 0.000001
 
-def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
+def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPSILON):
     """
     Returns nearly optimal binary search tree given key probabilities
     (beta_list) and gap probabilities (alpha_list)
@@ -33,6 +33,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
         inserted = False
         # find best split
         (left_index, right_index, prob_sum, parent) = section_queue.get()
+        # print "probability sum for", left_index, right_index, "is", prob_sum
 
         if (left_index < 0 or 
             right_index >= beta_length or 
@@ -72,6 +73,8 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
                                beta_list[right_index]))
 
         for i in xrange(1, (right_index - left_index + 1)):
+            min_difference_left = float("inf")
+            min_difference_right = float("inf")
             # print "inside loop at ", i
 
             # print "left last diff is", left_last_diff
@@ -86,11 +89,17 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
             # print "new diff for left is", new_diff
             # print "and left last diff is", left_last_diff
 
-            if new_diff < left_last_diff: # and abs(new_diff - left_last_diff) > EPSILON:
+            if (new_diff < left_last_diff) and (abs(new_diff - left_last_diff) > EPSILON):
                 # print "abs value is", abs(new_diff - left_last_diff)
                 # print "left will keep moving. left last diff was", left_last_diff, "new diff is", new_diff
                 # print "new diff of %f is better than old of %f" % (new_diff, left_last_diff)
+                if abs(new_diff - left_last_diff) < min_difference_left:
+                    min_difference_left = abs(new_diff - left_last_diff)
+                    print new_diff, "<", left_last_diff, "=", new_diff < left_last_diff
+                    print "is it bigger than epsilon?", abs(new_diff - left_last_diff) > EPSILON
+                left_prev = left_last_diff
                 left_last_diff = new_diff
+
             else:
                 best_split = left_index + i - 1
                 element_list.append(best_split)
@@ -128,8 +137,12 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
             # print "righthand prob sum", right_prob_sum
             # print "new diff for right is", new_diff
 
-            if new_diff < right_last_diff: # and abs(new_diff - right_last_diff) > EPSILON:
+            if new_diff < right_last_diff and abs(new_diff - right_last_diff) > EPSILON:
                 # print "right will keep moving. right last diff was", right_last_diff, "new diff is", new_diff
+                if abs(new_diff - right_last_diff) < min_difference_right:
+                    min_difference_right = abs(new_diff - right_last_diff)
+
+                right_prev = right_last_diff
                 right_last_diff = new_diff
             else:
                 
@@ -145,7 +158,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
                     parent.right = node
                 # print "inserted index into element_list:", best_split
 
-                prev_right_prob_sum = right_prob_sum - (beta_list[right_index + 1 - i] - alpha_list[right_index + 1 - i])
+                prev_right_prob_sum = right_prob_sum - beta_list[right_index + 1 - i] - alpha_list[right_index + 1 - i]
 
                 section_queue.put((best_split + 1, right_index, prev_right_prob_sum, node))
                 section_queue.put((left_index, 
@@ -158,8 +171,12 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
 
         if not inserted:
             print "Something went wrong at", left_index, right_index, prob_sum, parent
-            print new_diff, left_last_diff, right_last_diff
-            print abs(new_diff - left_last_diff)
+            print "betas from left to right:", beta_list[left_index:right_index+1]
+            print "alphas from left to right:", alpha_list[left_index:right_index+2]
+            # print left_prev, left_last_diff, right_prev, right_last_diff
+            # # print abs(left_prev -left_last_diff), abs(right_prev -right_last_diff)
+            # print "min difference left:", min_difference_left
+            # print "min difference right:", min_difference_right
 
     print len(element_list)
     return root

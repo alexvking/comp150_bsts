@@ -23,6 +23,31 @@ from BSTTree import BSTTree
 
 def test():
 
+    # size = 10
+    # while size < 11:
+    #     total_size = size + size + 1
+    #     prob = (float(1) / total_size)
+    #     bs = [prob for i in range(size)]
+    #     aes= [prob for i in range (size + 1)]
+    #     # aes = [a * 100000 for a in aes]
+    #     # bs  = [b * 100000 for b in bs]
+    #     print "building tree of", size
+    #     print bs[0], aes[0], len(bs), len(aes)
+    #     tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
+    #     print tree
+    #     itms = []
+    #     tree.inorder_traversal(lambda x : itms.append(x))
+    #     print "size is %d and items length is %d" % (size, len(itms))
+    #     if len(itms) != size:
+    #         # print bs
+    #         # print aes
+    #         print size
+    #         # print [i for i in range(size)]
+    #         print tree
+    #         exit(1)
+    #     size += 1
+    # exit(1)
+
     ### Try building a probability distribution of word frequency of 
     ### Huckleberry Finn
     # sys.setrecursionlimit(2000)
@@ -32,11 +57,11 @@ def test():
     # alphas = [0.0 for a in alphas]
     # alphas = [a * 100000 for a in alphas]
     # betas  = [b * 100000 for b in betas]
-    print sum(betas) + sum(alphas)
-    # exit(1)
+    # print sum(betas) + sum(alphas)
+    print min(betas), min(alphas)
     print len(alphas), len(betas), len(beta_values)
-    tree = Nlogn_build(betas, alphas, len(betas), beta_values)
-    # print tree
+    tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
+    print tree
     # tree.inorder_traversal_iter(lambda x : sys.stdout.write(x + "\n"))
     exit(1)
     # tree.inorder_traversal_iter(lambda x : x)
@@ -47,32 +72,34 @@ def test():
     # print beta_values[:300]
     (exp, root) = Knuth_find(betas, alphas, len(betas))
     tree = Knuth_build(root, beta_values)
-    print tree
+    # print tree
 
     exit(1)
 
-    size = 1
-    while size < 100:
-        total_size = size + size + 1
-        prob = (float(1) / total_size)
-        bs = [prob for i in range(size)]
-        aes= [prob for i in range (size + 1)]
-        print "building tree of", size
-        print bs[0], aes[0], len(bs), len(aes)
-        tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
-        # print tree
-        itms = []
-        tree.inorder_traversal(lambda x : itms.append(x))
-        print "size is %d and items length is %d" % (size, len(itms))
-        if len(itms) != size:
-            # print bs
-            # print aes
-            print size
-            # print [i for i in range(size)]
-            print tree
-            exit(1)
-        size += 1
-    exit(1)
+    # size = 1
+    # while size < 2000:
+    #     total_size = size + size + 1
+    #     prob = (float(1) / total_size)
+    #     bs = [prob for i in range(size)]
+    #     aes= [prob for i in range (size + 1)]
+    #     # aes = [a * 100000 for a in aes]
+    #     # bs  = [b * 100000 for b in bs]
+    #     print "building tree of", size
+    #     print bs[0], aes[0], len(bs), len(aes)
+    #     tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
+    #     print tree
+    #     itms = []
+    #     tree.inorder_traversal(lambda x : itms.append(x))
+    #     print "size is %d and items length is %d" % (size, len(itms))
+    #     if len(itms) != size:
+    #         # print bs
+    #         # print aes
+    #         print size
+    #         # print [i for i in range(size)]
+    #         print tree
+    #         exit(1)
+    #     size += 1
+    # exit(1)
 
     size = 1000
     total_size = size + size + 1
