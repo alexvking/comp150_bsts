@@ -59,7 +59,7 @@ def generate_search(alphas, betas, num_search):
 	return(test_list)
 
 #generate a search list with fuzz given alphas and betas
-def generate_fuzz_search(alphas, betas, num):
+def generate_fuzz_search(alphas, betas, num, keys):
 	test_list = []
 
 	all_probs = [0] * (len(alphas) + len(betas))
@@ -78,7 +78,7 @@ def generate_fuzz_search(alphas, betas, num):
 		indicator = random.random()
 		for j in range(len(sum_probs)):
 			if indicator < sum_probs[j]:
-				test_list.append(j)
+				test_list.append(keys[j])
 				break
 
 	return (test_list)

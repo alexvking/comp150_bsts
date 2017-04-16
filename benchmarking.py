@@ -27,6 +27,7 @@ def test():
 
     huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
     (alphas, betas, beta_values) = generate_probs(huck)
+    huck.sort()
 
 
     # nlogn
@@ -34,23 +35,25 @@ def test():
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
     end = time.time()
     print "Nlogn time to construct Huck Finn tree:", end-start
-    search_list = generate_fuzz_search(alphas, betas, 20000)
-    ss = {}
-    for k in search_list:
-        if k in ss:
-            ss[k] += 1
-        else:
-            ss[k] = 1
+    search_list = generate_fuzz_search(alphas, betas, 20000, huck)
+    #ss = {}
+    #for k in search_list:
+    #    if k in ss:
+    #        ss[k] += 1
+    #    else:
+    #        ss[k] = 1
 
-    ll = sorted(ss.items(), key=lambda kv: kv[1], reverse=True)
+    #ll = sorted(ss.items(), key=lambda kv: kv[1], reverse=True)
     # for i in range(200):
     #     # print beta_values[ll[i][0]], ll[i][1]
     #     print beta_values[(ll[i][0] - 1)/2]
     # exit(1)
     start = time.time()
     for k in search_list:
-        tree.find(beta_values[k/2])
+        #tree.find(beta_values[k/2])
+        tree.find(k)
     end = time.time()
+    #print search_list[:50]
     print "Nlogn time for 20000 fuzz search:", end-start, (end-start)/20000
     
     # n^2
@@ -61,7 +64,8 @@ def test():
     print "n^2 time to construct Huck Finn tree:", end-start
     start = time.time()
     for k in search_list:
-        tree.find(beta_values[k/2])
+        #tree.find(beta_values[k/2])
+        tree.find(k)
     end = time.time()
     print "n^2 time for 20000 fuzz search:", end-start, (end-start)/20000
 
@@ -76,7 +80,8 @@ def test():
     print "Time to build naive tree:", end-start
     start = time.time()
     for k in search_list:
-        tree.find(beta_values[k/2])
+        #tree.find(beta_values[k/2])
+        tree.find(search_list)
     end = time.time()
     print "naive time for 20000 fuzz search:", end-start, (end-start)/20000
     exit(1)
