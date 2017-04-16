@@ -10,7 +10,7 @@ from Queue import Queue
 from BSTTree import BSTTree
 import sys
 
-EPSILON = 0.00000001
+EPSILON = 0.0000001
 
 def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
     """
@@ -30,6 +30,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
     # Iteratively find the best root for each subtree
     while not section_queue.empty():
 
+        inserted = False
         # find best split
         (left_index, right_index, prob_sum, parent) = section_queue.get()
 
@@ -42,6 +43,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
             # print "base case with", left_index, right_index
             element_list.append(left_index)
             node = BSTTree(key_list[left_index])
+            inserted = True
 
             if parent is None:
                 # print "parent is none in base case"
@@ -53,6 +55,8 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
                 # print "best split is larger so assigning right child"
                 parent.right = node
             continue
+
+
 
         left_prob_sum = alpha_list[left_index]
         right_prob_sum = alpha_list[right_index + 1]
@@ -69,6 +73,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
 
         for i in xrange(1, (right_index - left_index + 1)):
             # print "inside loop at ", i
+
             # print "left last diff is", left_last_diff
 
             # Move lefthand pointer inwards and calculate new split
@@ -77,21 +82,20 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
             new_diff = abs(left_prob_sum - 
                            (prob_sum - left_prob_sum - beta_list[left_index + i]))
 
-            # print "just calculated new diff which is", new_diff
-
             # print "lefthand new prob sum", left_prob_sum
             # print "new diff for left is", new_diff
             # print "and left last diff is", left_last_diff
 
-            if new_diff < left_last_diff and abs(new_diff - left_last_diff) > EPSILON:
-                # print abs(new_diff - left_last_diff)
+            if new_diff < left_last_diff: # and abs(new_diff - left_last_diff) > EPSILON:
+                # print "abs value is", abs(new_diff - left_last_diff)
+                # print "left will keep moving. left last diff was", left_last_diff, "new diff is", new_diff
                 # print "new diff of %f is better than old of %f" % (new_diff, left_last_diff)
                 left_last_diff = new_diff
             else:
                 best_split = left_index + i - 1
                 element_list.append(best_split)
                 node = BSTTree(key_list[best_split])
-
+                inserted = True
                 if parent is None:
                     root = node
                 elif key_list[best_split] < parent.value:
@@ -120,17 +124,19 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
                             right_prob_sum - 
                             beta_list[right_index - i]))
 
+
             # print "righthand prob sum", right_prob_sum
             # print "new diff for right is", new_diff
 
-            if new_diff < right_last_diff and abs(new_diff - right_last_diff) > EPSILON:
+            if new_diff < right_last_diff: # and abs(new_diff - right_last_diff) > EPSILON:
+                # print "right will keep moving. right last diff was", right_last_diff, "new diff is", new_diff
                 right_last_diff = new_diff
             else:
                 
                 best_split = right_index - i + 1
                 element_list.append(best_split)
                 node = BSTTree(key_list[best_split])
-
+                inserted = True
                 if parent is None:
                     root = node
                 elif key_list[best_split] < parent.value:
@@ -149,6 +155,11 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
                                    beta_list[best_split]), node))
 
                 break
+
+        if not inserted:
+            print "Something went wrong at", left_index, right_index, prob_sum, parent
+            print new_diff, left_last_diff, right_last_diff
+            print abs(new_diff - left_last_diff)
 
     print len(element_list)
     return root

@@ -53,4 +53,4 @@ def test():
     #find_optimal_tree_ordering([0.00004999750012] * 10000, [0.00004999750012] * 10001, 10000)
     find_optimal_tree_ordering([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
 
-test()
+# test()

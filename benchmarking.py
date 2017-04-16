@@ -12,12 +12,47 @@ import sys
 from approximate_bst_knuth import find_optimal_tree_ordering as Knuth_find
 from approximate_bst_knuth import construct_tree_inline as Knuth_build
 from approximate_with_building import find_optimal_tree_ordering as Nlogn_build
+
+from optimal_bst_knuth_n3 import find_optimal_tree_ordering as Knuth_n3_find
+from optimal_bst_knuth_n3 import construct_tree_inline as Knuth_n3_build
+
 from generate_test import generate_probs
+
+from random import shuffle
+from BSTTree import BSTTree
 
 def test():
 
+    ### Try building a probability distribution of word frequency of 
+    ### Huckleberry Finn
+    # sys.setrecursionlimit(2000)
+    huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
+    huck.sort()
+    (alphas, betas, beta_values) = generate_probs(huck)
+    # alphas = [0.0 for a in alphas]
+    # alphas = [a * 100000 for a in alphas]
+    # betas  = [b * 100000 for b in betas]
+    print sum(betas) + sum(alphas)
+    # exit(1)
+    print len(alphas), len(betas), len(beta_values)
+    tree = Nlogn_build(betas, alphas, len(betas), beta_values)
+    # print tree
+    # tree.inorder_traversal_iter(lambda x : sys.stdout.write(x + "\n"))
+    exit(1)
+    # tree.inorder_traversal_iter(lambda x : x)
+    itms = []
+    tree.inorder_traversal(lambda x : itms.append(x))
+    print "length is %d" % (len(itms))
+    exit(1)
+    # print beta_values[:300]
+    (exp, root) = Knuth_find(betas, alphas, len(betas))
+    tree = Knuth_build(root, beta_values)
+    print tree
+
+    exit(1)
+
     size = 1
-    while size < 2000:
+    while size < 100:
         total_size = size + size + 1
         prob = (float(1) / total_size)
         bs = [prob for i in range(size)]
@@ -25,7 +60,95 @@ def test():
         print "building tree of", size
         print bs[0], aes[0], len(bs), len(aes)
         tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
-        print tree
+        # print tree
+        itms = []
+        tree.inorder_traversal(lambda x : itms.append(x))
+        print "size is %d and items length is %d" % (size, len(itms))
+        if len(itms) != size:
+            # print bs
+            # print aes
+            print size
+            # print [i for i in range(size)]
+            print tree
+            exit(1)
+        size += 1
+    exit(1)
+
+    size = 1000
+    total_size = size + size + 1
+    prob = (float(1) / total_size)
+    bs = [prob for i in range(size)]
+    aes= [prob for i in range (size + 1)]
+    values = [i for i in range(size)]
+    shuffle(values)
+    # print bs[0], aes[0], len(bs), len(aes)
+    start = time.time()
+    t = BSTTree(None)
+    for v in values:
+        t.insert(v)
+    end = time.time()
+    print "Time to build naive tree:", end-start
+    start = time.time()
+    for x in range(200):
+        for y in range(1000):
+            t.find(y)
+    end = time.time()
+    print "Time to search for all 1000 items 200 times each:", end-start
+    print "average time per lookup:", (end-start) / (200 * 1000)
+    exit(1)
+    # tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
+    # tree = Nlogn_build([0.00004999750012] * 10000, [0.00004999750012] * 10001, 10000)
+    end = time.time()
+    print "Time to build O(nlogn) tree of 1000 items:", end-start
+    start = time.time()
+    for x in range(200):
+        for y in range(1000):
+            tree.find(y)
+    end = time.time()
+    print "Time to search for all 1000 items 200 times each:", end-start
+    print "average time per lookup:", (end-start) / (200 * 1000)
+    exit(1)
+
+    # values = [i for i in range(1000)]
+    # start = time.time()
+    # (exp, root) = Knuth_n3_find([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
+    # tree = Knuth_n3_build(root, values)
+    # end = time.time()
+    # print "Time to build a Knuth tree of 1000 items:", end-start
+    # start = time.time()
+    # for x in range(200):
+    #     for y in range(1000):
+    #         tree.find(y)
+    # end = time.time()
+    # print "Time to search for all 1000 items 200 times each:", end-start
+    # print "average time per lookup:", (end-start) / (200 * 1000)
+    # exit(1)
+
+    values = [i for i in range(1000)]
+    start = time.time()
+    (exp, root) = Knuth_find([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
+    tree = Knuth_build(root, values)
+    end = time.time()
+    print "Time to build a Knuth tree of 1000 items:", end-start
+    start = time.time()
+    for x in range(200):
+        for y in range(1000):
+            tree.find(y)
+    end = time.time()
+    print "Time to search for all 1000 items 200 times each:", end-start
+    print "average time per lookup:", (end-start) / (200 * 1000)
+    exit(1)
+
+    size = 10000
+    while size < 10001:
+        total_size = size + size + 1
+        prob = (float(1) / total_size)
+        bs = [prob for i in range(size)]
+        aes= [prob for i in range (size + 1)]
+        print "building tree of", size
+        print bs[0], aes[0], len(bs), len(aes)
+        tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
+        # print tree
         itms = []
         tree.inorder_traversal(lambda x : itms.append(x))
         print "size is %d and items length is %d" % (size, len(itms))
@@ -41,16 +164,21 @@ def test():
 
     ### Try building a probability distribution of word frequency of 
     ### Huckleberry Finn
-
+    # sys.setrecursionlimit(2000)
     huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
     huck.sort()
     (alphas, betas, beta_values) = generate_probs(huck)
+    # alphas = [0.0 for a in alphas]
+    alphas = [a * 100000 for a in alphas]
+    betas  = [b * 100000 for b in betas]
+    print sum(betas) + sum(alphas)
+    # exit(1)
     print len(alphas), len(betas), len(beta_values)
     tree = Nlogn_build(betas, alphas, len(betas), beta_values)
+    # print tree
     # tree.inorder_traversal_iter(lambda x : sys.stdout.write(x + "\n"))
     exit(1)
     # tree.inorder_traversal_iter(lambda x : x)
-    # print tree
     itms = []
     tree.inorder_traversal(lambda x : itms.append(x))
     print "length is %d" % (len(itms))
@@ -89,7 +217,10 @@ def test():
         print "building tree of", size
         print bs[0], aes[0], len(bs), len(aes)
         tree = Nlogn_build(bs, aes, size, [i for i in range(size)])
-        # print tree
+        print tree
+        print
+        print
+
         itms = []
         tree.inorder_traversal(lambda x : itms.append(x))
         print "size is %d and items length is %d" % (size, len(itms))

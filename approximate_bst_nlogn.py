@@ -9,6 +9,8 @@
 from Queue import Queue
 from BSTTree import BSTTree
 
+EPSILON = 0.000000000001
+
 def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
     """
     Returns optimal insertion order of keys given a list of key probabilities
@@ -63,7 +65,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
             # print "lefthand new prob sum", left_prob_sum
             # print "new diff for left is", new_diff
 
-            if new_diff < left_last_diff:
+            if new_diff < left_last_diff and abs(new_diff - left_last_diff) > EPSILON:
                left_last_diff = new_diff
             else:
                 best_split = left_index + i - 1
@@ -91,7 +93,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length):
             # print "righthand prob sum", right_prob_sum
             # print "new diff for right is", new_diff
 
-            if new_diff < right_last_diff:
+            if new_diff < right_last_diff and abs(new_diff - right_last_diff) > EPSILON:
                 right_last_diff = new_diff
             else:
                 best_split = right_index - i + 1
@@ -125,4 +127,4 @@ def test():
     print "\n2 0 3 1", result
     print "Tests completed without errors"
 
-test()
+# test()

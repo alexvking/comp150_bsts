@@ -48,9 +48,39 @@ def print_table(table):
     for row in table:
         print row
 
+# construct_tree : root_table -> BSTTree
+def construct_tree_inline(root_table, key_list):
+    (i, j) = 0, len(root_table) - 1
+    root_index = root_table[i][j]
+    root = BSTTree(key_list[root_index])
+    node_stack = []
+    if (root_index + 1 <= j):
+        node_stack.append((root_index + 1, j, root))
+    if i <= (root_index - 1):
+        node_stack.append((i, root_index - 1, root))
+
+    while node_stack:
+        (i, j, parent) = node_stack.pop()
+        # print i, j
+        next_root = root_table[i][j]
+        # print "next root is", next_root
+        # element_list.append(next_root)
+        node = BSTTree(key_list[next_root])
+        if node.value < parent.value:
+            parent.left = node
+        else:
+            parent.right = node
+
+        if (next_root + 1 <= j):
+            node_stack.append((next_root + 1, j, node))
+        if i <= (next_root - 1):
+            node_stack.append((i, next_root - 1, node))
+            
+    return root
+
 def test():
     #find_optimal_tree_ordering([.1], [.45, .45], 1)
     #find_optimal_tree_ordering([0.00004999750012] * 10000, [0.00004999750012] * 10001, 10000)
     find_optimal_tree_ordering([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
 
-test()
+# test()
