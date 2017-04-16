@@ -16,12 +16,68 @@ from approximate_with_building import find_optimal_tree_ordering as Nlogn_build
 from optimal_bst_knuth_n3 import find_optimal_tree_ordering as Knuth_n3_find
 from optimal_bst_knuth_n3 import construct_tree_inline as Knuth_n3_build
 
-from generate_test import generate_probs
+from generate_test import generate_probs, generate_fuzz_search
 
 from random import shuffle
 from BSTTree import BSTTree
 
 def test():
+
+    ##### Try different trees at Huck Finn
+
+    huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
+    (alphas, betas, beta_values) = generate_probs(huck)
+
+
+    # nlogn
+    start = time.time()
+    tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
+    end = time.time()
+    print "Nlogn time to construct Huck Finn tree:", end-start
+    search_list = generate_fuzz_search(alphas, betas, 300000)
+    ss = {}
+    for k in search_list:
+        if k in ss:
+            ss[k] += 1
+        else:
+            ss[k] = 1
+
+    ll = sorted(ss.items(), key=lambda kv: kv[1], reverse=True)
+    # for i in range(200):
+    #     # print beta_values[ll[i][0]], ll[i][1]
+    #     print beta_values[(ll[i][0] - 1)/2]
+    # exit(1)
+    start = time.time()
+    for k in search_list:
+        tree.find(beta_values[k/2])
+    end = time.time()
+    print "Nlogn time for 300000 fuzz search:", end-start, (end-start)/300000
+    
+    # n^2
+    start = time.time()
+    (exp, root) = Knuth_find(betas, alphas, len(betas))
+    tree = Knuth_build(root, beta_values)
+    end = time.time()
+    print "n^2 time to construct Huck Finn tree:", end-start
+    start = time.time()
+    for k in search_list:
+        tree.find(beta_values[k/2])
+    end = time.time()
+    print "n^2 time for 300000 fuzz search:", end-start, (end-start)/300000
+    exit(1)
+    # values = [i for i in range(1000)]
+    # start = time.time()
+    # (exp, root) = Knuth_find([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
+    # tree = Knuth_build(root, values)
+    # end = time.time()
+    # print "Time to build a Knuth tree of 1000 items:", end-start
+    # start = time.time()
+    # for x in range(200):
+    #     for y in range(1000):
+    #         tree.find(y)
+    # end = time.time()
+    # print "Time to search for all 1000 items 200 times each:", end-start
+    # print "average time per lookup:", (end-start) / (200 * 1000)
 
     # size = 10
     # while size < 11:
@@ -52,13 +108,11 @@ def test():
     ### Huckleberry Finn
     # sys.setrecursionlimit(2000)
     huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
-    huck.sort()
+    # huck.sort()
     (alphas, betas, beta_values) = generate_probs(huck)
     # alphas = [0.0 for a in alphas]
     # alphas = [a * 100000 for a in alphas]
     # betas  = [b * 100000 for b in betas]
-    # print sum(betas) + sum(alphas)
-    print min(betas), min(alphas)
     print len(alphas), len(betas), len(beta_values)
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
     print tree
