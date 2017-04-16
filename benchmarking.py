@@ -34,7 +34,7 @@ def test():
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
     end = time.time()
     print "Nlogn time to construct Huck Finn tree:", end-start
-    search_list = generate_fuzz_search(alphas, betas, 300000)
+    search_list = generate_fuzz_search(alphas, betas, 20000)
     ss = {}
     for k in search_list:
         if k in ss:
@@ -51,7 +51,7 @@ def test():
     for k in search_list:
         tree.find(beta_values[k/2])
     end = time.time()
-    print "Nlogn time for 300000 fuzz search:", end-start, (end-start)/300000
+    print "Nlogn time for 20000 fuzz search:", end-start, (end-start)/20000
     
     # n^2
     start = time.time()
@@ -63,8 +63,24 @@ def test():
     for k in search_list:
         tree.find(beta_values[k/2])
     end = time.time()
-    print "n^2 time for 300000 fuzz search:", end-start, (end-start)/300000
+    print "n^2 time for 20000 fuzz search:", end-start, (end-start)/20000
+
+    values = [i for i in range(len(betas))]
+    shuffle(values)
+    # print bs[0], aes[0], len(bs), len(aes)
+    start = time.time()
+    t = BSTTree(None)
+    for v in values:
+        t.insert(beta_values[v])
+    end = time.time()
+    print "Time to build naive tree:", end-start
+    start = time.time()
+    for k in search_list:
+        tree.find(beta_values[k/2])
+    end = time.time()
+    print "naive time for 20000 fuzz search:", end-start, (end-start)/20000
     exit(1)
+
     # values = [i for i in range(1000)]
     # start = time.time()
     # (exp, root) = Knuth_find([0.0004997501249] * 1000, [0.0004997501249] * 1001, 1000)
