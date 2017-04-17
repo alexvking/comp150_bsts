@@ -25,15 +25,25 @@ def test():
 
     ##### Try different trees at Huck Finn
 
-    huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
-    (alphas, betas, beta_values) = generate_probs(huck)
-    huck.sort()
+    # huck = [word for line in open("test_data/hfinn.txt", 'r') for word in line.split()]
+    # (alphas, betas, beta_values) = generate_probs(huck)
+    # huck.sort()
+
+    corpus = [word for line in open("test_data/warandpeace.txt", 'r') for word in line.split()]
+    (alphas, betas, beta_values) = generate_probs(corpus)
+    corpus.sort()
+
+    print "CORPUS = WAR AND PEACE\n"
+    print "total words:", len(corpus), "keys:", len(beta_values)
 
     ##generate fuzz search
-    num_searches = 15000
-    fuzz_search_list = generate_fuzz_search(alphas, betas, num_searches, huck)
-    search_list = generate_search(alphas, betas, num_searches, huck)
+    num_searches = 42000
+    fuzz_search_list = generate_fuzz_search(alphas, betas, num_searches, corpus)
+    search_list = generate_search(alphas, betas, num_searches, corpus)
     shuffle(search_list)
+
+    #define number of corpus repeats
+    corpus_repeats = 2
 
     print "NLOGN:"
     # nlogn
@@ -41,6 +51,13 @@ def test():
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
     end = time.time()
     print "Construct time:", end-start
+
+    start = time.time()
+    for x in range(corpus_repeats):
+        for k in corpus:
+            tree.find(k)
+    end = time.time()
+    print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
 
     start = time.time()
     for k in search_list:
@@ -62,6 +79,13 @@ def test():
     tree = Knuth_build(root, beta_values)
     end = time.time()
     print "Construction time:", end-start
+
+    start = time.time()
+    for x in range(corpus_repeats):
+        for k in corpus:
+            tree.find(k)
+    end = time.time()
+    print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
 
     start = time.time()
     for k in search_list:
@@ -86,13 +110,21 @@ def test():
     for v in values:
         t.insert(beta_values[v])
     end = time.time()
+
     print "Build time:", end-start
 
     start = time.time()
+    for x in range(corpus_repeats):
+        for k in corpus:
+            tree.find(k)
+    end = time.time()
+    print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
+
+    start = time.time()
     for k in search_list:
-        #tree.find(beta_values[k/2])
         tree.find(k)
     end = time.time()
+    # print t
     print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
 
     start = time.time()
