@@ -40,25 +40,25 @@ class BSTTree:
             elif value == self.value:
                 return
 
-    def find(self, value):
+    def find(self, value, depth):
         """
         Returns whether the specified value exists in the tree
         """
         if self.value is None:
-            return False
+            return (False, depth)
         else:
             if value < self.value:
                 if self.left is None:
-                    return False
+                    return (False, depth)
                 else:
-                    return self.left.find(value)
+                    return self.left.find(value, depth + 1)
             elif value > self.value:
                 if self.right is None:
-                    return False
+                    return (False, depth)
                 else:
-                    return self.right.find(value)
+                    return self.right.find(value, depth + 1)
             elif value == self.value:
-                return True
+                return (True, depth)
 
     def inorder_traversal(self, func):
         """

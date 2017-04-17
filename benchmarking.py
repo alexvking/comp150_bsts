@@ -30,14 +30,15 @@ def test():
     # huck.sort()
 
     corpus = [word for line in open("test_data/warandpeace.txt", 'r') for word in line.split()]
+    corpus = corpus[:100000]
     (alphas, betas, beta_values) = generate_probs(corpus)
-    corpus.sort()
 
     print "CORPUS = WAR AND PEACE\n"
     print "total words:", len(corpus), "keys:", len(beta_values)
 
     ##generate fuzz search
     num_searches = 42000
+    print "Generating test lists..."
     fuzz_search_list = generate_fuzz_search(alphas, betas, num_searches, corpus)
     search_list = generate_search(alphas, betas, num_searches, corpus)
     shuffle(search_list)
@@ -53,52 +54,29 @@ def test():
     print "Construct time:", end-start
 
     start = time.time()
+    depths = []
     for x in range(corpus_repeats):
         for k in corpus:
-            tree.find(k)
+            depths.append(tree.find(k, 0)[1])
     end = time.time()
     print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
+    print float(sum(depths)) / len(depths)
 
+    depths = []
     start = time.time()
     for k in search_list:
-        tree.find(k)
+        depths.append(tree.find(k, 0)[1])
     end = time.time()
     print num_searches, "Proportional search time and average:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
 
+    depths = []
     start = time.time()
     for k in fuzz_search_list:
-        tree.find(k)
+        depths.append(tree.find(k, 0)[1])
     end = time.time()
     print num_searches, "Fuzz search time and average", end-start, (end-start)/num_searches
-    
-    print
-    print "KNUTH N^2"
-    # n^2
-    start = time.time()
-    (exp, root) = Knuth_find(betas, alphas, len(betas))
-    tree = Knuth_build(root, beta_values)
-    end = time.time()
-    print "Construction time:", end-start
-
-    start = time.time()
-    for x in range(corpus_repeats):
-        for k in corpus:
-            tree.find(k)
-    end = time.time()
-    print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
-
-    start = time.time()
-    for k in search_list:
-        #tree.find(beta_values[k/2])
-        tree.find(k)
-    end = time.time()
-    print num_searches, "Proportional search and avg:", end-start, (end-start)/num_searches
-
-    start = time.time()
-    for k in fuzz_search_list:
-        tree.find(k)
-    end = time.time()
-    print num_searches, "fuzz search time and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
 
     print
     print "NAIVE BST"
@@ -113,25 +91,68 @@ def test():
 
     print "Build time:", end-start
 
+    depths = []
     start = time.time()
     for x in range(corpus_repeats):
         for k in corpus:
-            tree.find(k)
+            depths.append(t.find(k, 0)[1])
     end = time.time()
     print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
+    print float(sum(depths)) / len(depths)
 
+    depths = []
     start = time.time()
     for k in search_list:
-        tree.find(k)
+        depths.append(t.find(k, 0)[1])
     end = time.time()
     # print t
     print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
 
+    depths = []
     start = time.time()
     for k in fuzz_search_list:
-        tree.find(k)
+        depths.append(t.find(k, 0)[1])
     end = time.time()
     print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
+
+    print
+    print "KNUTH N^2"
+    # n^2
+    start = time.time()
+    (exp, root) = Knuth_find(betas, alphas, len(betas))
+    tree = Knuth_build(root, beta_values)
+    end = time.time()
+    print "Construction time:", end-start
+
+    depths = []
+    start = time.time()
+    for x in range(corpus_repeats):
+        for k in corpus:
+            depths.append(tree.find(k, 0)[1])
+    end = time.time()
+    print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
+    print float(sum(depths)) / len(depths)
+
+    depths = []
+    start = time.time()
+    for k in search_list:
+        #tree.find(beta_values[k/2])
+        depths.append(tree.find(k, 0)[1])
+    end = time.time()
+    print num_searches, "Proportional search and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
+
+    depths = []
+    start = time.time()
+    for k in fuzz_search_list:
+        depths.append(tree.find(k, 0)[1])
+    end = time.time()
+    print num_searches, "fuzz search time and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
+
+
 
     exit(1)
 
