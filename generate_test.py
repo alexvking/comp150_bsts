@@ -39,21 +39,21 @@ def generate_test(element_range, num_checks):
 	return (test_list, betas, alphas)
 
 #generate a list of a given number of searches given alpha and beta values
-def generate_search(alphas, betas, num_search):
+def generate_search(alphas, betas, num_search, values):
 	test_list = []
 	insert_num = 0
 
 	for i in range(len(betas)):
 		for e in range(int(alphas[i] * num_search)):
-			test_list.append(insert_num)
+			test_list.append(values[insert_num])
 		insert_num += 1
 
 		for e in range(int(betas[i] * num_search)):
-			test_list.append(insert_num)
+			test_list.append(values[insert_num])
 		insert_num += 1
 
 	for e in range(int(alphas[len(betas)] * num_search)):
-		test_list.append(insert_num)
+		test_list.append(values[insert_num])
 
 	#could shuffle so it looks random
 	return(test_list)
