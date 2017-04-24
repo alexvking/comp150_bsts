@@ -12,6 +12,7 @@ import sys
 from approximate_bst_knuth import find_optimal_tree_ordering as Knuth_find
 from approximate_bst_knuth import construct_tree_inline as Knuth_build
 from approximate_with_building import find_optimal_tree_ordering as Nlogn_build
+from avl import AVLTree
 
 from optimal_bst_knuth_n3 import find_optimal_tree_ordering as Knuth_n3_find
 from optimal_bst_knuth_n3 import construct_tree_inline as Knuth_n3_build
@@ -116,6 +117,43 @@ def test():
     end = time.time()
     print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
+
+    print
+    print "AVL BST"
+    start = time.time()
+    t = AVLTree(values[0])
+    for v in values[1:]:
+        t = t.insert(beta_values[v])
+    end = time.time()
+
+    print "Build time:", end-start
+
+    depths = []
+    start = time.time()
+    for x in range(corpus_repeats):
+        for k in corpus:
+            depths.append(t.find(k, 0)[1])
+    end = time.time()
+    print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
+    print float(sum(depths)) / len(depths)
+
+    depths = []
+    start = time.time()
+    for k in search_list:
+        depths.append(t.find(k, 0)[1])
+    end = time.time()
+    # print t
+    print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
+
+    depths = []
+    start = time.time()
+    for k in fuzz_search_list:
+        depths.append(t.find(k, 0)[1])
+    end = time.time()
+    print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
+    print float(sum(depths)) / len(depths)
+
 
     print
     print "KNUTH N^2"
