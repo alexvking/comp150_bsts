@@ -1,9 +1,15 @@
-#avl.py
-#constructs an AVL tree
+# AVLTree.py
+# COMP 150
+# Created by Cori Jacoby
+# 4/24/2017
+
+# AVL tree implementation to be used by optimal construction
+# algorithms
 
 from BSTTree import BSTTree
 
 #created a subclass AVL Tree class to add in balancing factor
+
 class AVLTree(BSTTree):
 
     def __init__(self, value):
@@ -12,7 +18,6 @@ class AVLTree(BSTTree):
         self.parent = None
 
     def insert(self, value):
-        # print "inserting", value, "at", self.value
         if self.value is None:
             self.value = value
         else:
@@ -26,19 +31,15 @@ class AVLTree(BSTTree):
                     return self.left.insert(value)
             elif value > self.value:
                 if self.right is None:
-                    # print "inserting into None right"
                     self.right = AVLTree(value)
                     self.right.parent = self
-                    # print "inserting", value, "to right of", self.value
                     return self.rebalance(self.right)
                 else:
-                    # print "recursing on right", self.right
                     return self.right.insert(value)
             elif value == self.value:
                 return
 
     def rebalance(parent, child):
-        # print "rebalancing subtree at", parent.value
         grandparent = parent.parent
         sub_root = None
         if parent.left == child:
@@ -83,7 +84,6 @@ class AVLTree(BSTTree):
                 grandparent.left = sub_root
             else:
                 grandparent.right = sub_root
-        #print 'setting parent of', sub_root.value, "to", grandparent
         sub_root.parent = grandparent
         
         return sub_root.return_root()
@@ -172,16 +172,10 @@ class AVLTree(BSTTree):
         return
 
     def return_root(self):
-        # print "in return root"
         parent = self.parent
         if parent == None:
-            # print "parent of", self.value,"is none so have root"
             return self
         else:
-            # print "self:", self.value, "parent:", parent.value
-            # print "printing parent"
-            # print parent
-            # print parent.parent
             return parent.return_root()
 
 def test():
@@ -191,11 +185,3 @@ def test():
         t = t.insert(x)
 
     print t
-
-
-
-
-
-
-
-
