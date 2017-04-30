@@ -21,7 +21,9 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_len):
         exp_table[x][x] = alpha_list[x]
         weight_table[x][x] = alpha_list[x]
 
-    for y in range(beta_len + 1): 
+    for y in range(beta_len + 1):
+        if y % 500 == 0:
+            print "Knuth algorithm: on iteration", y, "of", beta_len + 1
         for i in range(beta_len - y):
             j = i + y + 1
             exp_table[i][j] = float("inf")

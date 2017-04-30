@@ -8,6 +8,7 @@
 # File opening, timing, and test data creation
 import sys
 import time
+import resource
 from random import shuffle
 from generate_test import generate_probs, generate_fuzz_search, generate_search
 
@@ -55,7 +56,7 @@ def test():
     print "total words:", len(corpus), "keys:", len(beta_values)
 
     # generate fuzz search
-    print "Generating test lists..."
+    print "Generating test lists...\n"
     fuzz_search_list = generate_fuzz_search(alphas, betas, num_searches, corpus)
     search_list = generate_search(alphas, betas, num_searches, corpus)
     shuffle(search_list)
@@ -65,7 +66,7 @@ def test():
 
     ### Tree Testing
 
-    print "NLOGN:"
+    print "NLOGN"
     # nlogn
     start = time.time()
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
@@ -254,11 +255,13 @@ def test():
 
 
     # Finally, calculate the intercept of our two most compelling algorithms
-    # to demonstrate the practical tradeoff. 
-    print "In order for the Knuth algorithm to be worth your time, you will", \
-          "need to anticipate making at least %0.0f searches." % \
-          ((-(nlogn_build_time - n2_build_time))/
+    # to demonstrate the practical tradeoff
+    print "\nIn order for the Knuth algorithm to be worth your time, you will\n", \
+          "need to anticipate making at least %d searches." % \
+          int((-(nlogn_build_time - n2_build_time))/
            (nlogn_avg_search - n2_avg_search))
+
+    print "\nMemory:", float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)/1000000, "megaytes used"
 
 
 test()
