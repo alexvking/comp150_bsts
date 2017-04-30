@@ -30,31 +30,31 @@ def test():
     Test function to build trees based on corpus specified
     """
 
-    # TODO: parameterize the following bits of information as command line
-    # arguments:
-    #  - test file (give file name)
-    #  - number of words to read (minimum 1; if > total words, just use all)
-    #  - number of searches to do (num_searches)
+    if len(sys.argv) < 2:
+        print "Usage: python benchmarking.py corpus.txt num_words num_searches"
+        exit(1)
 
-    # TODO: new functionality:
-    #  - Do math at the end to compare runtimes of nlogn and n^2, such that
-    #    we're able to report approximately how many searches would be required
-    #    to make the n^2 tree "worth it"
+    corpusfile = sys.argv[1]
+    num_words = 10000
+    num_searches = 100000
+    if len(sys.argv) >= 3:
+        num_words = int(sys.argv[2])
+    if len(sys.argv) == 4:
+        num_searches = int(sys.argv[3])
 
     # Convert text document of English words into Python list of strings/words
     corpus = [word for line in 
-              open("test_data/warandpeace.txt", 'r') for word in line.split()]
+              open(corpusfile, 'r') for word in line.split()]
 
     # Take a subset of the entire corpus
-    corpus = corpus[:50000]
+    corpus = corpus[:num_words]
 
     (alphas, betas, beta_values) = generate_probs(corpus)
 
-    print "CORPUS = WAR AND PEACE\n"
+    print "CORPUS =", corpusfile
     print "total words:", len(corpus), "keys:", len(beta_values)
 
     # generate fuzz search
-    num_searches = 10000
     print "Generating test lists..."
     fuzz_search_list = generate_fuzz_search(alphas, betas, num_searches, corpus)
     search_list = generate_search(alphas, betas, num_searches, corpus)
@@ -71,6 +71,7 @@ def test():
     tree = Nlogn_build(betas, alphas, len(betas), beta_values, min(betas) / 2)
     end = time.time()
     print "Construct time:", end-start
+    nlogn_build_time = end-start
 
     start = time.time()
     depths = []
@@ -88,6 +89,7 @@ def test():
     end = time.time()
     print num_searches, "Proportional search time and average:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
+    nlogn_avg_search = (end-start)/num_searches
 
     depths = []
     start = time.time()
@@ -222,6 +224,7 @@ def test():
     tree = Knuth_build(root, beta_values)
     end = time.time()
     print "Construction time:", end-start
+    n2_build_time = end-start
 
     depths = []
     start = time.time()
@@ -235,11 +238,11 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        #tree.find(beta_values[k/2])
         depths.append(tree.find(k, 0)[1])
     end = time.time()
     print num_searches, "Proportional search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
+    n2_avg_search = (end-start)/num_searches
 
     depths = []
     start = time.time()
@@ -248,6 +251,14 @@ def test():
     end = time.time()
     print num_searches, "fuzz search time and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
+
+
+    # Finally, calculate the intercept of our two most compelling algorithms
+    # to demonstrate the practical tradeoff
+    print "In order for the Knuth algorithm to be worth your time, you will", \
+          "need to anticipate making at least %0.0f searches." % \
+          ((-(nlogn_build_time - n2_build_time))/
+           (nlogn_avg_search - n2_avg_search))
 
 
 test()

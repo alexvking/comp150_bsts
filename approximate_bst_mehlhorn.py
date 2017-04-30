@@ -26,7 +26,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
     # Iteratively find the best root for each subtree
     while not section_queue.empty():
 
-        inserted = False
         # find best split
         (left_index, right_index, prob_sum, parent) = section_queue.get()
 
@@ -37,7 +36,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
 
         if left_index == right_index:
             node = BSTTree(key_list[left_index])
-            inserted = True
 
             if parent is None:
                 root = node
@@ -76,7 +74,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
             else:
                 best_split = left_index + i - 1
                 node = BSTTree(key_list[best_split])
-                inserted = True
                 if parent is None:
                     root = node
                 elif key_list[best_split] < parent.value:
@@ -109,7 +106,6 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
                 
                 best_split = right_index - i + 1
                 node = BSTTree(key_list[best_split])
-                inserted = True
                 if parent is None:
                     root = node
                 elif key_list[best_split] < parent.value:
@@ -127,8 +123,5 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
                                    beta_list[best_split]), node))
 
                 break
-
-        if not inserted:
-            pass
 
     return root
