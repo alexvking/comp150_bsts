@@ -77,7 +77,7 @@ def test():
     depths = []
     for x in range(corpus_repeats):
         for k in corpus:
-            depths.append(tree.find(k, 0)[1])
+            depths.append(tree.find(k)[1])
     end = time.time()
     print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
     print float(sum(depths)) / len(depths)
@@ -85,7 +85,7 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        depths.append(tree.find(k, 0)[1])
+        depths.append(tree.find(k)[1])
     end = time.time()
     print num_searches, "Proportional search time and average:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -94,7 +94,7 @@ def test():
     depths = []
     start = time.time()
     for k in fuzz_search_list:
-        depths.append(tree.find(k, 0)[1])
+        depths.append(tree.find(k)[1])
     end = time.time()
     print num_searches, "Fuzz search time and average", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -118,7 +118,7 @@ def test():
     start = time.time()
     for x in range(corpus_repeats):
         for k in corpus:
-            depths.append(t.find(k, 0)[1])
+            depths.append(t.find(k)[1])
     end = time.time()
     print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
     print float(sum(depths)) / len(depths)
@@ -126,7 +126,7 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     # print t
     print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
@@ -135,7 +135,7 @@ def test():
     depths = []
     start = time.time()
     for k in fuzz_search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -156,7 +156,7 @@ def test():
     start = time.time()
     for x in range(corpus_repeats):
         for k in corpus:
-            depths.append(t.find(k, 0)[1])
+            depths.append(t.find(k)[1])
     end = time.time()
     print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
     print float(sum(depths)) / len(depths)
@@ -164,7 +164,7 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     # print t
     print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
@@ -173,7 +173,7 @@ def test():
     depths = []
     start = time.time()
     for k in fuzz_search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -192,7 +192,7 @@ def test():
     start = time.time()
     for x in range(corpus_repeats):
         for k in corpus:
-            depths.append(t.find(k, 0)[1])
+            depths.append(t.find(k)[1])
     end = time.time()
     print corpus_repeats, "x Corpus search time and avg:", end-start, (end-start)/len(corpus)
     print float(sum(depths)) / len(depths)
@@ -200,7 +200,7 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     # print t
     print num_searches, "proportional search and avg:", end-start, (end-start)/num_searches
@@ -209,7 +209,7 @@ def test():
     depths = []
     start = time.time()
     for k in fuzz_search_list:
-        depths.append(t.find(k, 0)[1])
+        depths.append(t.find(k)[1])
     end = time.time()
     print num_searches, "fuzz search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -230,7 +230,7 @@ def test():
     start = time.time()
     for x in range(corpus_repeats):
         for k in corpus:
-            depths.append(tree.find(k, 0)[1])
+            depths.append(tree.find(k)[1])
     end = time.time()
     print corpus_repeats,"x Corpus search time and avg:", end-start, (end-start)/len(corpus)
     print float(sum(depths)) / len(depths)
@@ -238,7 +238,7 @@ def test():
     depths = []
     start = time.time()
     for k in search_list:
-        depths.append(tree.find(k, 0)[1])
+        depths.append(tree.find(k)[1])
     end = time.time()
     print num_searches, "Proportional search and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
@@ -247,14 +247,14 @@ def test():
     depths = []
     start = time.time()
     for k in fuzz_search_list:
-        depths.append(tree.find(k, 0)[1])
+        depths.append(tree.find(k)[1])
     end = time.time()
     print num_searches, "fuzz search time and avg:", end-start, (end-start)/num_searches
     print float(sum(depths)) / len(depths)
 
 
     # Finally, calculate the intercept of our two most compelling algorithms
-    # to demonstrate the practical tradeoff
+    # to demonstrate the practical tradeoff. 
     print "In order for the Knuth algorithm to be worth your time, you will", \
           "need to anticipate making at least %0.0f searches." % \
           ((-(nlogn_build_time - n2_build_time))/
