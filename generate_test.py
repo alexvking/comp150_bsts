@@ -1,4 +1,9 @@
-#file to generate different types of test data
+# generate_test.py
+# COMP 150
+# Created by Cori Jacoby
+# 4/12/2017
+
+# Tools to generate different types of test data
 
 import random
 from collections import Counter
@@ -24,14 +29,10 @@ def generate_test(element_range, num_checks):
     i = 0
 
     while i < (len(probs) - 1):
-        print "inserting at", i
         alphas.append(probs[i])
         i += 1
-        print "inserting at", i
         betas.append(probs[i])
         i += 1
-
-    print "inserting at", i
     alphas.append(probs[i])
 
     assert(i == (len(probs) - 1))
@@ -56,7 +57,7 @@ def generate_search(alphas, betas, num_search, values):
         test_list.append(values[insert_num])
 
     #could shuffle so it looks random
-    return(test_list)
+    return (test_list)
 
 #generate a search list with fuzz given alphas and betas
 def generate_fuzz_search(alphas, betas, num, keys):
@@ -112,7 +113,6 @@ def generate_probs(data):
 
 def generate_probs_high_leaf(data):
     total = len(data)
-
     counts = Counter(data)
     
     beta_values = []
@@ -182,5 +182,3 @@ def test():
     #print generate_probs_uniform(5)
 
 test()
-
-

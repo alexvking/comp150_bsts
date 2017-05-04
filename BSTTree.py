@@ -40,7 +40,10 @@ class BSTTree:
             elif value == self.value:
                 return
 
-    def find(self, value, depth):
+    def find(self, value):
+        return self.find_with_depth(value, 0)
+
+    def find_with_depth(self, value, depth):
         """
         Returns whether the specified value exists in the tree
         """
@@ -51,12 +54,12 @@ class BSTTree:
                 if self.left is None:
                     return (False, depth)
                 else:
-                    return self.left.find(value, depth + 1)
+                    return self.left.find_with_depth(value, depth + 1)
             elif value > self.value:
                 if self.right is None:
                     return (False, depth)
                 else:
-                    return self.right.find(value, depth + 1)
+                    return self.right.find_with_depth(value, depth + 1)
             elif value == self.value:
                 return (True, depth)
 
@@ -71,28 +74,6 @@ class BSTTree:
         func(self.value)
         if self.right:
             self.right.inorder_traversal(func)
-
-    def inorder_traversal_iter(self, func):
-        """
-        Performs specified function for each node in tree in order
-        Iterative algorithm taken from http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
-        """
-        # Set current to root of binary tree
-        current = self 
-        s = []
-        done = 0
-         
-        while(not done):
-            if current is not None:
-                s.append(current)
-                current = current.left 
-            else:
-                if(len(s) >0 ):
-                    current = s.pop()
-                    func(current.value),
-                    current = current.right 
-                else:
-                    done = 1
 
     def preorder_traversal(self, func):
         """
