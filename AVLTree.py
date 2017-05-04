@@ -20,6 +20,7 @@ class AVLTree(BSTTree):
     def insert(self, value):
         if self.value is None:
             self.value = value
+            return self.return_root()
         else:
             if value < self.value:
                 # Recursion on child isn't possible unless it's initialized
@@ -37,7 +38,7 @@ class AVLTree(BSTTree):
                 else:
                     return self.right.insert(value)
             elif value == self.value:
-                return
+                return self.return_root()
 
     def rebalance(parent, child):
         grandparent = parent.parent

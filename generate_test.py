@@ -42,6 +42,7 @@ def generate_test(element_range, num_checks):
 #generate a list of a given number of searches given alpha and beta values
 def generate_search(alphas, betas, num_search, values):
     test_list = []
+    values = sorted(values)
     insert_num = 0
 
     for i in range(len(betas)):
@@ -52,6 +53,10 @@ def generate_search(alphas, betas, num_search, values):
         for e in range(int(betas[i] * num_search)):
             test_list.append(values[insert_num])
         insert_num += 1
+
+    #last alpha
+    # while insert_num < num_search:
+    #     test_list.append(values[insert_num])
 
     for e in range(int(alphas[len(betas)] * num_search)):
         test_list.append(values[insert_num])
@@ -99,10 +104,10 @@ def generate_probs(data):
 
     for (k, c) in it:
         if num == 0:
-            alphas.append(c/float(total))
+            alphas.append(float(c)/float(total))
             num = 1
         else:
-            betas.append(c/float(total))
+            betas.append(float(c)/float(total))
             beta_values.append(k)
             num = 0
 
@@ -166,10 +171,10 @@ def generate_probs_high_key(data):
     return (alphas, betas, beta_values)
 
 def generate_probs_uniform(num_betas):
-    prob = float(1)/float((2 * num_betas + 1))
-    alphas = [prob] * (num_betas + 1)
+    prob = float(1)/float(num_betas)
+    alphas = [0] * (num_betas + 1)
     betas = [prob] * num_betas
-    b_vals = [i for i in range(num_betas)]
+    b_vals = [i for i in xrange(num_betas)]
 
     return (alphas, betas, b_vals)
 
@@ -180,5 +185,8 @@ def test():
     #print generate_fuzz_search([.2, .3], [.5], 12)
     #print generate_probs_high_key([1, 1, 1, 1, 3, 3, 4, 4, 5, 6, 6, 6, 7])
     #print generate_probs_uniform(5)
+    # vals = ["a", "b", "c", "d", "a", "b", "c", "a", "b", "a"]
+    # (alphas, betas, b_vals) = generate_probs(vals)
+    print generate_search(alphas, betas, 20, vals)
 
-test()
+#test()
