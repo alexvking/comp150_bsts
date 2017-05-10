@@ -44,11 +44,15 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list):
             continue
 
         max_prob = 0
-        best_split = left_index
+        best_splits = [left_index]
         for i in range(left_index, right_index + 1):
             if beta_list[i] > max_prob:
                 max_prob = beta_list[i]
-                best_split = i
+                best_splits = [i]
+            if beta_list[i] == max_prob:
+                best_splits.append(i)
+
+        best_split = best_splits[len(best_splits)/2]
 
         node = BSTTree(key_list[best_split])
         if parent is None:
