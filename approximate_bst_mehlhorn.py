@@ -39,7 +39,7 @@ def find_optimal_tree_ordering(beta_list, alpha_list, beta_length, key_list, EPS
 
             if parent is None:
                 root = node
-            elif left_index < parent.value:
+            elif key_list[left_index] < parent.value:
                 parent.left = node
             else:
                 parent.right = node
