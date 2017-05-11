@@ -86,7 +86,6 @@ def test():
         datasets.append(("uniform ds", generate_probs_uniform(even_dist_keys), [i for i in range(even_dist_keys)]))
 
     for (name, (alphas, betas, beta_values), corpora) in datasets:
-        #all_words = Counter(corpus)
         print "========================================"
         print "running", name
         print len(beta_values)
@@ -94,7 +93,6 @@ def test():
         shuffle(insert_indices)
 
         searches = corpora
-
 
         #MEHLHORN 
         print
@@ -111,7 +109,6 @@ def test():
                 depths.append(nlogntree.find(k)[1])
         end = time.time()
         print "BUILD TIME:", cons_time, "AVG SEARCH TIME:", (end-start)/(len(searches) * corpus_repeats), "AVG DEPTH:", float(sum(depths))/len(depths)
-
 
         #KNUTH OPTION 1
         print

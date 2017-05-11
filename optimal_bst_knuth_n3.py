@@ -1,4 +1,4 @@
-# optimal_bst_knuth.py
+# optimal_bst_knuth_n3.py
 # COMP 150
 # Created by Cori Jacoby and Alex King
 # 4/9/2017

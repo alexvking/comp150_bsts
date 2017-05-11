@@ -1,4 +1,4 @@
-# approximate_with_building.py
+# approximate_bst_mehlhorn.py
 # COMP 150
 # Created by Cori Jacoby and Alex King
 # 4/6/2017

@@ -177,16 +177,3 @@ def generate_probs_uniform(num_betas):
     b_vals = [i for i in xrange(num_betas)]
 
     return (alphas, betas, b_vals)
-
-
-def test():
-    #print generate_search([.25, .25], [.5], 20)
-    #print generate_test(6, 12)
-    #print generate_fuzz_search([.2, .3], [.5], 12)
-    #print generate_probs_high_key([1, 1, 1, 1, 3, 3, 4, 4, 5, 6, 6, 6, 7])
-    #print generate_probs_uniform(5)
-    # vals = ["a", "b", "c", "d", "a", "b", "c", "a", "b", "a"]
-    # (alphas, betas, b_vals) = generate_probs(vals)
-    print generate_search(alphas, betas, 20, vals)
-
-#test()
